@@ -6,7 +6,7 @@ export const PostCard = ({ post }) => {
     <div className="post">
       <img alt={post.image.title} className="post-image" src={post.image.url} />
       <div className="post-content">
-        <h1>{post.title}</h1>
+        <h2>{post.title}</h2>
         <p>{post.body}</p>
       </div>
     </div>

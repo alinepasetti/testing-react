@@ -1,40 +1,36 @@
 import { Component } from "react";
+
 import "./App.css";
-import { PostCard } from "./components/PostCard";
+import { LoadMoreButton } from "./components/LoadMoreButton";
+
+import { Posts } from "./components/Posts";
+import { loadPosts } from "./utils/load-posts";
 
 class App extends Component {
   state = {
     posts: [],
+    filteredPosts: []
   };
 
-  componentDidMount() {
-    this.loadPosts();
+  async componentDidMount() {
+    await this.loadPosts();
   }
 
-  loadPosts = async () => {
-    const postsResponse = fetch("https://jsonplaceholder.typicode.com/posts");
-    const photosResponse = fetch("https://jsonplaceholder.typicode.com/photos");
-    const [postsRaw, photosRaw] = await Promise.all([
-      postsResponse,
-      photosResponse,
-    ]);
-    const posts = await postsRaw.json();
-    const photos = await photosRaw.json();
+  async loadPosts() {
+    const posts = await loadPosts();
+    this.setState({ posts, filteredPosts: posts.splice(0, 5) });
+  }
 
-    posts.forEach((post, i) => (post.image = photos[i]));
-    this.setState({ posts });
-  };
+  loadMorePosts = () => {
+    this.setState((prevState) => ({ filteredPosts: prevState.posts.splice(0, prevState.filteredPosts.length + 5) }));
+  }
 
   render() {
-    const { posts } = this.state;
+    const { filteredPosts } = this.state;
     return (
       <section className="container">
-        <div className="posts">
-          {posts.length &&
-            posts.map((post) => (
-                <PostCard post={post} key={post.id} />
-            ))}
-        </div>
+        <Posts posts={filteredPosts} />
+        <LoadMoreButton onClickHandler={this.loadMorePosts} />
       </section>
     );
   }
