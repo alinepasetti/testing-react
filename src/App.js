@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react";
+import "./App.css";
+import { PostCard } from "./components/PostCard";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    posts: [],
+  };
+
+  componentDidMount() {
+    this.loadPosts();
+  }
+
+  loadPosts = async () => {
+    const postsResponse = fetch("https://jsonplaceholder.typicode.com/posts");
+    const photosResponse = fetch("https://jsonplaceholder.typicode.com/photos");
+    const [postsRaw, photosRaw] = await Promise.all([
+      postsResponse,
+      photosResponse,
+    ]);
+    const posts = await postsRaw.json();
+    const photos = await photosRaw.json();
+
+    posts.forEach((post, i) => (post.image = photos[i]));
+    this.setState({ posts });
+  };
+
+  render() {
+    const { posts } = this.state;
+    return (
+      <section className="container">
+        <div className="posts">
+          {posts.length &&
+            posts.map((post) => (
+                <PostCard post={post} key={post.id} />
+            ))}
+        </div>
+      </section>
+    );
+  }
 }
 
 export default App;
