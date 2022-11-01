@@ -1,7 +1,5 @@
-import React from 'react'
+import React from "react";
 
-export const LoadMoreButton = ({onClickHandler}) => {
-  return (
-    <button onClick={onClickHandler}>Load More</button>
-  )
-}
+export const LoadMoreButton = ({ onClickHandler }) => {
+  return <button onClick={onClickHandler}>Load More</button>;
+};

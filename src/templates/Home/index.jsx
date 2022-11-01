@@ -1,15 +1,14 @@
 import { Component } from "react";
+import { LoadMoreButton } from "../../components/LoadMoreButton";
+import { Posts } from "../../components/Posts";
+import { loadPosts } from "../../utils/load-posts";
 
-import "./App.css";
-import { LoadMoreButton } from "./components/LoadMoreButton";
+import "./styles.css";
 
-import { Posts } from "./components/Posts";
-import { loadPosts } from "./utils/load-posts";
-
-class App extends Component {
+class Home extends Component {
   state = {
     posts: [],
-    filteredPosts: []
+    filteredPosts: [],
   };
 
   async componentDidMount() {
@@ -22,8 +21,13 @@ class App extends Component {
   }
 
   loadMorePosts = () => {
-    this.setState((prevState) => ({ filteredPosts: prevState.posts.splice(0, prevState.filteredPosts.length + 5) }));
-  }
+    this.setState((prevState) => ({
+      filteredPosts: prevState.posts.splice(
+        0,
+        prevState.filteredPosts.length + 5
+      ),
+    }));
+  };
 
   render() {
     const { filteredPosts } = this.state;
@@ -36,4 +40,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Home;

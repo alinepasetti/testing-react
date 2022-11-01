@@ -1,5 +1,5 @@
 import React from "react";
-import "./index.css";
+import "./styles.css";
 
 export const PostCard = ({ post }) => {
   return (
@@ -11,4 +11,4 @@ export const PostCard = ({ post }) => {
       </div>
     </div>
   );
-}
+};
