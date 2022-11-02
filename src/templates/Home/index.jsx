@@ -12,7 +12,7 @@ class Home extends Component {
     posts: [],
     page: 0,
     postsPerPage: 5,
-    searchInput: "",
+    searchValue: "",
   };
 
   async componentDidMount() {
@@ -35,28 +35,34 @@ class Home extends Component {
   };
 
   handleInputChange = (event) => {
-    const searchInput = event.target.value;
-    const { allPosts } = this.state;
-    const filteredPosts = allPosts.filter(
-      (post) => post.title.indexOf(searchInput) >= 0
-    );
-    this.setState({ searchInput, posts: filteredPosts });
+    const searchValue = event.target.value;
+    this.setState({ searchValue });
   };
 
   render() {
-    const { posts, allPosts, searchInput } = this.state;
+    const { posts, allPosts, searchValue } = this.state;
     const noMorePosts = posts.length >= allPosts.length;
+    const filteredPosts = !!searchValue
+      ? allPosts.filter((post) =>
+          post.title.toLowerCase().includes(searchValue.toLowerCase())
+        )
+      : posts;
+
     return (
       <section className="container">
         <Search
           onChangeHandler={this.handleInputChange}
-          searchInput={searchInput}
+          searchValue={searchValue}
         />
-        <Posts posts={posts} />
-        <LoadMoreButton
-          onClickHandler={this.loadMorePosts}
-          disabled={noMorePosts}
-        />
+        {filteredPosts.length > 0 && <Posts posts={filteredPosts} />}
+        {filteredPosts.length === 0 && <p>No hay posteles</p>}
+
+        {!searchValue && (
+          <LoadMoreButton
+            onClickHandler={this.loadMorePosts}
+            disabled={noMorePosts}
+          />
+        )}
       </section>
     );
   }

@@ -1,5 +1,15 @@
 import React from "react";
+import "./styles.css";
 
-export const Search = ({ onChangeHandler, searchInput }) => {
-  return <input value={searchInput} onChange={onChangeHandler} type="search" />;
+export const Search = ({ onChangeHandler, searchValue }) => {
+  return (
+    <div className="search-container">
+      <input
+        placeholder="Type your search"
+        value={searchValue}
+        onChange={onChangeHandler}
+        type="search"
+      />
+    </div>
+  );
 };

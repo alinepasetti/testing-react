@@ -1,0 +1,9 @@
+.search-container {
+  margin-bottom: 30px;
+}
+
+.search-container input {
+  width: 100%;
+  font-size: 30px;
+  padding: 5px 10px;
+}
