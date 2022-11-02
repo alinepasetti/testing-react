@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { LoadMoreButton } from "../../components/LoadMoreButton";
 import { Posts } from "../../components/Posts";
+import { Search } from "../../components/Search";
 import { loadPosts } from "../../utils/load-posts";
 
 import "./styles.css";
@@ -11,6 +12,7 @@ class Home extends Component {
     posts: [],
     page: 0,
     postsPerPage: 5,
+    searchInput: "",
   };
 
   async componentDidMount() {
@@ -32,11 +34,24 @@ class Home extends Component {
     });
   };
 
+  handleInputChange = (event) => {
+    const searchInput = event.target.value;
+    const { allPosts } = this.state;
+    const filteredPosts = allPosts.filter(
+      (post) => post.title.indexOf(searchInput) >= 0
+    );
+    this.setState({ searchInput, posts: filteredPosts });
+  };
+
   render() {
-    const { posts, allPosts } = this.state;
+    const { posts, allPosts, searchInput } = this.state;
     const noMorePosts = posts.length >= allPosts.length;
     return (
       <section className="container">
+        <Search
+          onChangeHandler={this.handleInputChange}
+          searchInput={searchInput}
+        />
         <Posts posts={posts} />
         <LoadMoreButton
           onClickHandler={this.loadMorePosts}
