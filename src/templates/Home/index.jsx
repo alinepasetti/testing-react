@@ -7,8 +7,10 @@ import "./styles.css";
 
 class Home extends Component {
   state = {
+    allPosts: [],
     posts: [],
-    filteredPosts: [],
+    page: 0,
+    postsPerPage: 5,
   };
 
   async componentDidMount() {
@@ -16,25 +18,30 @@ class Home extends Component {
   }
 
   async loadPosts() {
-    const posts = await loadPosts();
-    this.setState({ posts, filteredPosts: posts.splice(0, 5) });
+    const { postsPerPage, page } = this.state;
+    const allPosts = await loadPosts();
+    this.setState({ allPosts, posts: allPosts.slice(page, postsPerPage) });
   }
 
   loadMorePosts = () => {
-    this.setState((prevState) => ({
-      filteredPosts: prevState.posts.splice(
-        0,
-        prevState.filteredPosts.length + 5
-      ),
-    }));
+    const { postsPerPage, page, allPosts } = this.state;
+    const nextPage = page + postsPerPage;
+    this.setState({
+      posts: allPosts.slice(0, nextPage + postsPerPage),
+      page: nextPage,
+    });
   };
 
   render() {
-    const { filteredPosts } = this.state;
+    const { posts, allPosts } = this.state;
+    const noMorePosts = posts.length >= allPosts.length;
     return (
       <section className="container">
-        <Posts posts={filteredPosts} />
-        <LoadMoreButton onClickHandler={this.loadMorePosts} />
+        <Posts posts={posts} />
+        <LoadMoreButton
+          onClickHandler={this.loadMorePosts}
+          disabled={noMorePosts}
+        />
       </section>
     );
   }
