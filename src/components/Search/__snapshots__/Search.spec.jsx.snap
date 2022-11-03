@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Search /> should match snapshot 1`] = `
+<div
+  className="search-container"
+>
+  <input
+    onChange={[MockFunction]}
+    placeholder="Type your search"
+    type="search"
+    value="banana"
+  />
+</div>
+`;

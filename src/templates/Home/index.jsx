@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { LoadMoreButton } from "../../components/LoadMoreButton";
+import { Button } from "../../components/Button";
 import { Posts } from "../../components/Posts";
 import { Search } from "../../components/Search";
 import { loadPosts } from "../../utils/load-posts";
@@ -58,10 +58,7 @@ class Home extends Component {
         {filteredPosts.length === 0 && <p>No hay posteles</p>}
 
         {!searchValue && (
-          <LoadMoreButton
-            onClickHandler={this.loadMorePosts}
-            disabled={noMorePosts}
-          />
+          <Button onClickHandler={this.loadMorePosts} disabled={noMorePosts} />
         )}
       </section>
     );
