@@ -1,5 +1,5 @@
-describe("<Home>", () => {
-  it("dummy", () => {
+describe('<Home>', () => {
+  it('dummy', () => {
     expect(1).toBe(1);
   });
 });

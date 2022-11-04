@@ -1,10 +1,10 @@
-import { Component } from "react";
-import { Button } from "../../components/Button";
-import { Posts } from "../../components/Posts";
-import { Search } from "../../components/Search";
-import { loadPosts } from "../../utils/load-posts";
+import { Component } from 'react';
+import { Button } from '../../components/Button';
+import { Posts } from '../../components/Posts';
+import { Search } from '../../components/Search';
+import { loadPosts } from '../../utils/load-posts';
 
-import "./styles.css";
+import './styles.css';
 
 class Home extends Component {
   state = {
@@ -12,7 +12,7 @@ class Home extends Component {
     posts: [],
     page: 0,
     postsPerPage: 5,
-    searchValue: "",
+    searchValue: '',
   };
 
   async componentDidMount() {
@@ -43,23 +43,16 @@ class Home extends Component {
     const { posts, allPosts, searchValue } = this.state;
     const noMorePosts = posts.length >= allPosts.length;
     const filteredPosts = !!searchValue
-      ? allPosts.filter((post) =>
-          post.title.toLowerCase().includes(searchValue.toLowerCase())
-        )
+      ? allPosts.filter((post) => post.title.toLowerCase().includes(searchValue.toLowerCase()))
       : posts;
 
     return (
       <section className="container">
-        <Search
-          onChangeHandler={this.handleInputChange}
-          searchValue={searchValue}
-        />
+        <Search onChangeHandler={this.handleInputChange} searchValue={searchValue} />
         {filteredPosts.length > 0 && <Posts posts={filteredPosts} />}
         {filteredPosts.length === 0 && <p>No hay posteles</p>}
 
-        {!searchValue && (
-          <Button onClickHandler={this.loadMorePosts} disabled={noMorePosts} />
-        )}
+        {!searchValue && <Button onClickHandler={this.loadMorePosts} disabled={noMorePosts} />}
       </section>
     );
   }
