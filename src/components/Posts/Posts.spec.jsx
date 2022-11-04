@@ -34,6 +34,12 @@ describe("<Posts />", () => {
     expect(bodies).toHaveLength(2);
   });
 
+  it("should not render posts", () => {
+    render(<Posts posts={[]} />);
+    const headings = screen.queryByRole("heading", { name: /title/i });
+    expect(headings).not.toBeInTheDocument();
+  });
+
   it("should match snapshot", () => {
     const postsElement = renderer.create(<Posts posts={MOCK_PROPS} />).toJSON();
     expect(postsElement).toMatchSnapshot();
