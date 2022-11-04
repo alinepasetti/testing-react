@@ -17,5 +17,13 @@ export const PostCard = ({ post }) => {
 };
 
 PostCard.propTypes = {
-  post: P.object.isRequired,
+  post: P.shape({
+    title: P.string.isRequired,
+    body: P.string.isRequired,
+    id: P.number.isRequired,
+    image: P.shape({
+      title: P.string.isRequired,
+      url: P.string.isRequired,
+    }),
+  }),
 };

@@ -4,7 +4,7 @@ import { Button } from '.';
 
 describe('<Button />', () => {
   it('render the button with the text', () => {
-    render(<Button />);
+    render(<Button onClickHandler={jest.fn()} disabled={false} />);
     const button = screen.getByRole('button', { name: /load more/i });
     expect(button).toBeInTheDocument();
   });
@@ -28,13 +28,13 @@ describe('<Button />', () => {
   });
 
   it('should be disabled when disabled is true', () => {
-    render(<Button disabled={true} />);
+    render(<Button onClickHandler={jest.fn()} disabled={true} />);
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
   });
 
   it('should be enabled when disabled is false', () => {
-    render(<Button disabled={false} />);
+    render(<Button onClickHandler={jest.fn()} disabled={false} />);
     const button = screen.getByRole('button');
     expect(button).toBeEnabled();
   });
