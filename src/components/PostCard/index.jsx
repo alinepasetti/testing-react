@@ -1,3 +1,4 @@
+import P from 'prop-types';
 import React from 'react';
 import './styles.css';
 
@@ -13,4 +14,8 @@ export const PostCard = ({ post }) => {
       </div>
     </div>
   );
+};
+
+PostCard.propTypes = {
+  post: P.object.isRequired,
 };

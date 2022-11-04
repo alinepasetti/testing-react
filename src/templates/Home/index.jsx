@@ -42,7 +42,7 @@ class Home extends Component {
   render() {
     const { posts, allPosts, searchValue } = this.state;
     const noMorePosts = posts.length >= allPosts.length;
-    const filteredPosts = !!searchValue
+    const filteredPosts = searchValue
       ? allPosts.filter((post) => post.title.toLowerCase().includes(searchValue.toLowerCase()))
       : posts;
 

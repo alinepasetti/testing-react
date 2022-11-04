@@ -1,3 +1,4 @@
+import P from 'prop-types';
 import React from 'react';
 import './styles.css';
 
@@ -9,4 +10,9 @@ export const Button = ({ onClickHandler, disabled }) => {
       </button>
     </div>
   );
+};
+
+Button.propTypes = {
+  onClickHandler: P.func.isRequired,
+  disabled: P.bool.isRequired,
 };
