@@ -100,7 +100,7 @@ describe('<Home />', () => {
     expect(screen.queryByRole('heading', { name: '3 title3' })).not.toBeInTheDocument();
   });
 
-  it('display no posts message when the search result is empty', async () => {
+  it('displays no posts message when the search result is empty', async () => {
     render(<Home />);
     const noMorePosts = screen.getByText('Não existem posts =(');
     expect.assertions(4);
@@ -115,5 +115,45 @@ describe('<Home />', () => {
     expect(screen.queryByRole('heading', { name: '2 title2' })).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: '3 title3' })).not.toBeInTheDocument();
     expect(screen.getByText('Não existem posts =(')).toBeInTheDocument();
+  });
+
+  it('should hide the button while searching', async () => {
+    render(<Home />);
+    const noMorePosts = screen.getByText('Não existem posts =(');
+    expect.assertions(2);
+    await waitForElementToBeRemoved(noMorePosts);
+
+    const button = screen.getByRole('button', { name: /load more posts/i });
+    expect(button).toBeInTheDocument();
+
+    const input = screen.getByRole('searchbox');
+    userEvent.type(input, 'banana');
+    expect(button).not.toBeInTheDocument();
+  });
+
+  it('should load more posts when user clicks the button', async () => {
+    render(<Home />);
+    const noMorePosts = screen.getByText('Não existem posts =(');
+    expect.assertions(4);
+    await waitForElementToBeRemoved(noMorePosts);
+
+    expect(screen.queryByRole('heading', { name: '1 title1' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '2 title2' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '3 title3' })).not.toBeInTheDocument();
+    const button = screen.getByRole('button', { name: /load more posts/i });
+    userEvent.click(button);
+
+    expect(screen.queryByRole('heading', { name: '3 title3' })).toBeInTheDocument();
+  });
+
+  it('should disable button when posts end', async () => {
+    render(<Home />);
+    const noMorePosts = screen.getByText('Não existem posts =(');
+    expect.assertions(1);
+    await waitForElementToBeRemoved(noMorePosts);
+    const button = screen.getByRole('button', { name: /load more posts/i });
+    userEvent.click(button);
+
+    expect(button).toBeDisabled();
   });
 });
