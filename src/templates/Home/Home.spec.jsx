@@ -50,7 +50,14 @@ describe('<Home />', () => {
   it('should render search, posts and load more', async () => {
     render(<Home />);
     const noMorePosts = screen.getByText('Não existem posts =(');
-
+    expect.assertions(3);
     await waitForElementToBeRemoved(noMorePosts);
+
+    const input = screen.getByRole('searchbox');
+    expect(input).toBeInTheDocument();
+    const image = screen.getAllByRole('img');
+    expect(image).toHaveLength(2);
+    const button = screen.getByRole('button', { name: /load more posts/i });
+    expect(button).toBeInTheDocument();
   });
 });
