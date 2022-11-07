@@ -3,6 +3,7 @@ import { setupServer } from 'msw/node';
 
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import { Home } from '.';
+import userEvent from '@testing-library/user-event';
 
 const handlers = [
   rest.get('*jsonplaceholder.typicode.com*', async (_, res, ctx) => {
@@ -59,5 +60,60 @@ describe('<Home />', () => {
     expect(image).toHaveLength(2);
     const button = screen.getByRole('button', { name: /load more posts/i });
     expect(button).toBeInTheDocument();
+  });
+
+  it('should render the first 2 posts correctly', async () => {
+    render(<Home />);
+    const noMorePosts = screen.getByText('Não existem posts =(');
+    expect.assertions(3);
+    await waitForElementToBeRemoved(noMorePosts);
+
+    const title1 = screen.getByRole('heading', { name: /title1/i });
+    expect(title1).toBeInTheDocument();
+    const title2 = screen.getByRole('heading', { name: /title2/i });
+    expect(title2).toBeInTheDocument();
+    const title3 = screen.queryByRole('heading', { name: /title3/i });
+    expect(title3).not.toBeInTheDocument();
+  });
+
+  it('should search for posts', async () => {
+    render(<Home />);
+    const noMorePosts = screen.getByText('Não existem posts =(');
+    expect.assertions(7);
+    await waitForElementToBeRemoved(noMorePosts);
+
+    const input = screen.getByRole('searchbox');
+
+    // user types title3
+    userEvent.type(input, 'title3');
+
+    expect(screen.queryByRole('heading', { name: '1 title1' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '2 title2' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '3 title3' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Search value: title3' })).toBeInTheDocument();
+
+    // user deletes the whole value of the input field
+    userEvent.clear(input);
+
+    expect(screen.queryByRole('heading', { name: '1 title1' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '2 title2' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '3 title3' })).not.toBeInTheDocument();
+  });
+
+  it('display no posts message when the search result is empty', async () => {
+    render(<Home />);
+    const noMorePosts = screen.getByText('Não existem posts =(');
+    expect.assertions(4);
+    await waitForElementToBeRemoved(noMorePosts);
+
+    const input = screen.getByRole('searchbox');
+
+    // user types a non existing post title
+    userEvent.type(input, 'banana');
+
+    expect(screen.queryByRole('heading', { name: '1 title1' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '2 title2' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '3 title3' })).not.toBeInTheDocument();
+    expect(screen.getByText('Não existem posts =(')).toBeInTheDocument();
   });
 });
